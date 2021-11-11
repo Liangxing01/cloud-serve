@@ -1,0 +1,71 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Like, Not } from 'typeorm';
+import { ReserveInfo } from '../entity//reserve.entity';
+import { CreateDto } from './dto/create.dto';
+
+interface searchWhere {
+  username?: any;
+  time?: any;
+  telphone?: any;
+  page?: number;
+  pageSize?: number;
+}
+
+@Injectable()
+export class ReserveService {
+  constructor(
+    @InjectRepository(ReserveInfo)
+    private readonly reserveRepository: Repository<ReserveInfo>,
+  ) {}
+
+  // 获取所有的客户
+  async getList(query: searchWhere) {
+    const { page, pageSize, username, telphone, time } = query;
+    const where: searchWhere = {};
+    username && (where.username = Like(`%${username}%`));
+    telphone && (where.telphone = Like(`%${telphone}%`));
+    time && (where.time = Like(`%${time}%`));
+
+    const [list, total] = await this.reserveRepository.findAndCount({
+      select: ['username', 'telphone', 'time', 'cIds', 'id', 'createDate'],
+      where: {
+        deleteFlag: Not(0),
+        ...where,
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      order: {
+        createDate: 'DESC',
+      },
+    });
+    return {
+      list,
+      total,
+    };
+  }
+  // 新增婚纱
+  async post(data: CreateDto) {
+    const { remark, username, telphone, time, cIds } = data;
+    const cloth = new CreateDto();
+    cloth.username = username;
+    cloth.telphone = telphone;
+    cloth.time = time;
+    cloth.cIds = cIds;
+    cloth.remark = remark;
+    const result = await this.reserveRepository.save(cloth);
+    return result;
+  }
+
+  async update(id: number, data: CreateDto) {
+    const info = await this.reserveRepository.findOne(id);
+    Object.assign(info, data);
+    return this.reserveRepository.save(info);
+  }
+
+  async delete(id) {
+    const info = await this.reserveRepository.findOne(id);
+    info.deleteFlag = 0;
+    return this.reserveRepository.save(info);
+  }
+}
