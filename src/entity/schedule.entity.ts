@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class ReserveInfo {
+export class ScheduleInfo {
   @PrimaryGeneratedColumn()
   id: number;
 

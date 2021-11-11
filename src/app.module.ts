@@ -8,11 +8,13 @@ import { CommonModule } from 'common/common.modules';
 import { UserModule } from 'user-manage/user.module';
 import { ClothModule } from 'cloth-manage/cloth.modules';
 import { ReserveModule } from 'reserve-manage/reserve.module';
+import { ScheduleModule } from 'schedule-manage/schedule.module';
 
 import { User } from './entity/user.entity';
 import { SysEnum } from './entity/sys_enum.entity';
 import { Cloth } from './entity/cloth-info.entity';
 import { ReserveInfo } from 'entity/reserve.entity';
+import { ScheduleInfo } from 'entity/schedule.entity';
 
 @Module({
   providers: [
@@ -29,13 +31,14 @@ import { ReserveInfo } from 'entity/reserve.entity';
       username: 'root',
       password: 'lx123456',
       database: 'yunjian',
-      entities: [User, SysEnum, Cloth, ReserveInfo],
+      entities: [User, SysEnum, Cloth, ReserveInfo, ScheduleInfo],
       synchronize: true,
     }),
     CommonModule,
     UserModule,
     ClothModule,
     ReserveModule,
+    ScheduleModule,
   ],
 })
 export class AppModule implements NestModule {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Not } from 'typeorm';
-import { ReserveInfo } from '../entity//reserve.entity';
+import { ScheduleInfo } from '../entity/schedule.entity';
 import { CreateDto } from './dto/create.dto';
 
 interface searchWhere {
@@ -14,10 +14,10 @@ interface searchWhere {
 }
 
 @Injectable()
-export class ReserveService {
+export class ScheduleService {
   constructor(
-    @InjectRepository(ReserveInfo)
-    private readonly reserveRepository: Repository<ReserveInfo>,
+    @InjectRepository(ScheduleInfo)
+    private readonly reserveRepository: Repository<ScheduleInfo>,
   ) {}
 
   // 获取所有的客户

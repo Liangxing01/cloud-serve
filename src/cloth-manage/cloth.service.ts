@@ -23,6 +23,9 @@ export class ClothService {
   async getSelects() {
     return await this.clothRepository.find({
       select: ['name', 'id'],
+      where: {
+        deleteFlag: Not(0),
+      },
     });
   }
 
