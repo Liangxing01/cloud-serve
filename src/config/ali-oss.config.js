@@ -1,6 +1,8 @@
-export const OSS_CONFIG = {
-  region: 'oss-cn-beijing',
-  accessKeyId: 'LTAI5tRAFshaFvsBz24cvh9m',
-  accessKeySecret: '5QKE975GJdBnBikNRTmut5z246Q6ii',
-  bucket: 'cloud-wedding',
-};
+import { OSS_CONFIG, DB_CONFIG } from '../../.evn.prd';
+import { OSS_DEV_CONFIG, DB_DEV_CONFIG } from '../../.evn';
+
+export const ossConfig =
+  process.env.NODE_ENV === 'dev' ? OSS_DEV_CONFIG : OSS_CONFIG;
+
+export const dbConfig =
+  process.env.NODE_ENV === 'dev' ? DB_DEV_CONFIG : DB_CONFIG;

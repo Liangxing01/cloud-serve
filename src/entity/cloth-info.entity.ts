@@ -30,6 +30,15 @@ export class Cloth {
   @Column({ comment: '备注' })
   remark: string;
 
+  @Column({ comment: '租借次数' })
+  rentNum: number;
+
+  @Column({ comment: '是否被租赁' })
+  rentFlag: number;
+
+  @Column({ comment: '账号id' })
+  accountId: number;
+
   @Column({ comment: '删除标识', default: 1 })
   deleteFlag: number;
 

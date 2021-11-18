@@ -30,6 +30,9 @@ export class ReserveInfo {
   @Column({ comment: '删除标识', default: 1 })
   deleteFlag: number;
 
+  @Column({ comment: '账号id' })
+  accountId: number;
+
   @CreateDateColumn()
   createDate: Timestamp;
 

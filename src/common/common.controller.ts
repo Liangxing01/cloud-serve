@@ -10,11 +10,11 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CommonService } from './common.service';
 
-import { OSS_CONFIG } from '../config/ali-oss.config';
+import { ossConfig } from '../config/ali-oss.config';
 
 const OSS = require('ali-oss');
 
-const oss_client = new OSS(OSS_CONFIG);
+const oss_client = new OSS(ossConfig);
 
 @Controller('common')
 export class CommonController {

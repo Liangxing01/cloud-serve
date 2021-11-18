@@ -13,4 +13,7 @@ export class SysEnum {
 
   @Column({ comment: '枚举value' })
   value: number;
+
+  @Column({ comment: '账号id' })
+  accountId: number;
 }
