@@ -8,6 +8,7 @@ import { UserModule } from 'user-manage/user.module';
 import { ClothModule } from 'cloth-manage/cloth.modules';
 import { ReserveModule } from 'reserve-manage/reserve.module';
 import { ScheduleModule } from 'schedule-manage/schedule.module';
+import { LoggerModule } from 'logger/logger.module';
 
 import { User } from './entity/user.entity';
 import { Role } from './entity/role.entity';
@@ -46,10 +47,11 @@ const { host, username, password, database } = dbConfig;
     ClothModule, // 婚纱相关
     ReserveModule, // 预约相关
     ScheduleModule, // 档期相关
+    LoggerModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware);
+    consumer.apply(LoggerMiddleware).forRoutes();
   }
 }

@@ -1,11 +1,20 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AccountService } from './account.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly userServer: AccountService) {}
 
   @Post('add')
+  @UseGuards(AuthGuard('jwt'))
   async creeateOne(@Body() body) {
     await this.userServer.postUser(body);
     return '创建成功！';
@@ -19,15 +28,8 @@ export class AccountController {
   }
 
   @Post('login')
-  async validateAccount(@Body() body) {
-    const { account, password } = body;
-
-    const info = await this.userServer.validateAccount(account, password);
-
-    if (info) {
-      return '登录成功';
-    }
-
-    throw new UnauthorizedException('账号不匹配');
+  @UseGuards(AuthGuard('local'))
+  async validateAccount(@Request() req) {
+    return this.userServer.login(req.user);
   }
 }
