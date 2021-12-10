@@ -1,14 +1,12 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { LoggerMiddleware } from './middleware/logger.middle';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AccountModule } from 'account-manage/account.module';
-import { CommonModule } from 'common/common.modules';
-import { UserModule } from 'user-manage/user.module';
-import { ClothModule } from 'cloth-manage/cloth.modules';
-import { ReserveModule } from 'reserve-manage/reserve.module';
-import { ScheduleModule } from 'schedule-manage/schedule.module';
-import { LoggerModule } from 'logger/logger.module';
+import { AccountModule } from 'modules/account-manage/account.module';
+import { CommonModule } from 'modules/common/common.modules';
+import { UserModule } from 'modules/user-manage/user.module';
+import { ClothModule } from 'modules/cloth-manage/cloth.modules';
+import { ReserveModule } from 'modules/reserve-manage/reserve.module';
+import { ScheduleModule } from 'modules/schedule-manage/schedule.module';
 
 import { User } from './entity/user.entity';
 import { Role } from './entity/role.entity';
@@ -19,6 +17,8 @@ import { ScheduleInfo } from 'entity/schedule.entity';
 import { Account } from 'entity/account.entity';
 
 import { dbConfig } from './config/ali-oss.config';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 const { host, username, password, database } = dbConfig;
 @Module({
@@ -47,11 +47,8 @@ const { host, username, password, database } = dbConfig;
     ClothModule, // 婚纱相关
     ReserveModule, // 预约相关
     ScheduleModule, // 档期相关
-    LoggerModule,
+    AuthModule,
+    UsersModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes();
-  }
-}
+export class AppModule {}
