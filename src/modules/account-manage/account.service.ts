@@ -3,14 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Not } from 'typeorm';
 import { Account } from '../../entity/account.entity';
 import { CreateDto } from './dto/create.dto';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AccountService {
   constructor(
     @InjectRepository(Account)
     private readonly userRepository: Repository<Account>,
-    private readonly jwtService: JwtService,
   ) {}
   // 获取所有的客户
   async getAllUsers(query) {
@@ -58,13 +56,5 @@ export class AccountService {
     }
 
     return null;
-  }
-
-  async login(user) {
-    const { id, account } = user;
-
-    return {
-      token: this.jwtService.sign({ account, sub: id }),
-    };
   }
 }

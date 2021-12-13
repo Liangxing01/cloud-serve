@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AuthMiddleware } from './middle/auth.middle';
 
 import { AccountModule } from 'modules/account-manage/account.module';
 import { CommonModule } from 'modules/common/common.modules';
@@ -7,6 +9,8 @@ import { UserModule } from 'modules/user-manage/user.module';
 import { ClothModule } from 'modules/cloth-manage/cloth.modules';
 import { ReserveModule } from 'modules/reserve-manage/reserve.module';
 import { ScheduleModule } from 'modules/schedule-manage/schedule.module';
+
+import { UserController } from 'modules/user-manage/user.controller';
 
 import { User } from './entity/user.entity';
 import { Role } from './entity/role.entity';
@@ -51,4 +55,8 @@ const { host, username, password, database } = dbConfig;
     UsersModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes(UserController);
+  }
+}

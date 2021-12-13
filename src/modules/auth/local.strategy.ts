@@ -4,16 +4,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, 'local-login') {
   constructor(private readonly authService: AuthService) {
     super();
   }
 
   async validate(username: string, password: string): Promise<any> {
-    console.log('xxxxx', username);
     const user = await this.authService.validateUser(username, password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('账号密码不对');
     }
     return user;
   }
