@@ -1,7 +1,8 @@
 import { UnauthorizedException } from '@nestjs/common';
 
 export const AuthMiddleware = (req, res, next) => {
-  if (req.cookies.userInfo) {
+  console.log(req, 'res');
+  if (req.path == '/auth/login' || req.cookies.userInfo) {
     next();
   } else {
     throw new UnauthorizedException();

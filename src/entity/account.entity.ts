@@ -18,6 +18,9 @@ export class Account {
   @Column({ comment: '用户名' })
   username: string;
 
+  @Column({ comment: '角色' })
+  roles: string;
+
   @Column({ comment: '微信号' })
   wxName: string;
 

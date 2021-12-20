@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(
@@ -14,12 +14,12 @@ export class AuthGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-    console.log(roles, 'roles');
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    console.log(request, 'user');
-    return roles[0] === 'bvu';
+    console.log(user.roles, 'xxxx');
+
+    return roles[0] === user.roles;
   }
 }

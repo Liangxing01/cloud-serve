@@ -1,9 +1,10 @@
-import { Controller, Request, Res, Post, UseGuards, Get } from '@nestjs/common';
+import { Controller, Request, Res, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { serviceConfig } from '../../config/service.config';
 @Controller('auth')
 export class AuthController {
+  static loginInfo = {};
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard('local-login'))
@@ -20,11 +21,5 @@ export class AuthController {
     } else {
       res.end('登录失败');
     }
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
   }
 }

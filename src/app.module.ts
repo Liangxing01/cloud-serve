@@ -22,7 +22,6 @@ import { Account } from 'entity/account.entity';
 
 import { dbConfig } from './config/ali-oss.config';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
 
 const { host, username, password, database } = dbConfig;
 @Module({
@@ -52,11 +51,10 @@ const { host, username, password, database } = dbConfig;
     ReserveModule, // 预约相关
     ScheduleModule, // 档期相关
     AuthModule,
-    UsersModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(UserController);
+    // consumer.apply(AuthMiddleware).forRoutes(UserController);
   }
 }
