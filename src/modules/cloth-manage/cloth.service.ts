@@ -42,7 +42,7 @@ export class ClothService {
       select: [
         'name',
         'code',
-        'priceType',
+        'price',
         'type',
         'createDate',
         'id',

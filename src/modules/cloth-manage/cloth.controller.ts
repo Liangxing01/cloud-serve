@@ -1,33 +1,51 @@
-import { Controller, Get, Post, Query, Body, Put, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Body,
+  Put,
+  HttpCode,
+  UseGuards,
+} from '@nestjs/common';
 import { ClothService } from './cloth.service';
+import { RoleGuard } from '../../guard/role.guard';
+import { Roles } from '../../decorator/role.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('cloth')
+@UseGuards(AuthGuard('jwt'), RoleGuard)
 export class ClothController {
   constructor(private readonly userServer: ClothService) {}
 
+  @HttpCode(200)
   @Get('select')
   async getSelects() {
     return await this.userServer.getSelects();
   }
 
-  @Get('list')
-  async getAll(@Query() query) {
-    const result = await this.userServer.getAllCloths(query);
+  @HttpCode(200)
+  @Post('list')
+  async getAll(@Body() body) {
+    const result = await this.userServer.getAllCloths(body);
     return result;
   }
 
+  @HttpCode(200)
+  @Roles('admin')
   @Post('add')
   async creeateOne(@Body() body) {
     await this.userServer.post(body);
     return '创建成功！';
   }
-
+  @HttpCode(200)
   @Get('detail')
   async getDetail(@Query('id') ids) {
     const params = ids.split(',').map((id) => id - 0);
     return await this.userServer.getDetailByIds(params);
   }
 
+  @HttpCode(200)
   @Post('update')
   async update(@Body() body) {
     const { id, ...param } = body;
@@ -35,6 +53,7 @@ export class ClothController {
     return '更新成功！';
   }
 
+  @HttpCode(200)
   @Put('delete')
   async put(@Body('id') id) {
     console.log(id, 'xxx');

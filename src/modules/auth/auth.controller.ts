@@ -1,13 +1,23 @@
-import { Controller, Request, Res, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Res,
+  Post,
+  UseGuards,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { serviceConfig } from '../../config/service.config';
 @Controller('auth')
+@UseGuards(AuthGuard('local-login'))
 export class AuthController {
   static loginInfo = {};
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local-login'))
+  @HttpCode(200)
   @Post('login')
   async login(@Request() req, @Res() res) {
     if (req.user) {
@@ -19,7 +29,10 @@ export class AuthController {
       });
       res.end('登录成功！');
     } else {
-      res.end('登录失败');
+      throw new HttpException(
+        '账号密码不匹配!',
+        HttpStatus.NON_AUTHORITATIVE_INFORMATION,
+      );
     }
   }
 }

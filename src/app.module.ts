@@ -12,14 +12,6 @@ import { ScheduleModule } from 'modules/schedule-manage/schedule.module';
 
 import { UserController } from 'modules/user-manage/user.controller';
 
-import { User } from './entity/user.entity';
-import { Role } from './entity/role.entity';
-import { SysEnum } from './entity/sys_enum.entity';
-import { Cloth } from './entity/cloth-info.entity';
-import { ReserveInfo } from 'entity/reserve.entity';
-import { ScheduleInfo } from 'entity/schedule.entity';
-import { Account } from 'entity/account.entity';
-
 import { dbConfig } from './config/ali-oss.config';
 import { AuthModule } from './modules/auth/auth.module';
 
@@ -33,16 +25,9 @@ const { host, username, password, database } = dbConfig;
       username,
       password,
       database,
-      entities: [
-        User,
-        SysEnum,
-        Cloth,
-        ReserveInfo,
-        ScheduleInfo,
-        Account,
-        Role,
-      ],
-      synchronize: true,
+      entities: [],
+      autoLoadEntities: true,
+      // synchronize: true,
     }),
     AccountModule, // 账户相关
     CommonModule, // 公共接口：比如文件上传
@@ -55,6 +40,6 @@ const { host, username, password, database } = dbConfig;
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(AuthMiddleware).forRoutes(UserController);
+    consumer.apply(AuthMiddleware).forRoutes(UserController);
   }
 }

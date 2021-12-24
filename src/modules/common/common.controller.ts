@@ -26,6 +26,7 @@ export class CommonController {
     return await this.commonServer.findEnumByCode(enumCode);
   }
 
+  @HttpCode(200)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async putFile(@UploadedFile() file) {

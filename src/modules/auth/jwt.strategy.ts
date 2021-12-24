@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtConstants } from './constants';
 
 @Injectable()
@@ -9,7 +9,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request) => {
-          console.log(2, 'jwt');
+          if (!request.cookies.userInfo) {
+            throw new UnauthorizedException('账号信息已过期, 请重新登录');
+          }
           return request.cookies.userInfo;
         },
       ]),
@@ -20,6 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: any) {
     const { sub, username, roles, password } = payload;
+
+    if (!sub || !username || !roles || !password) {
+      throw new UnauthorizedException('账号登录信息失效，请重新登录');
+    }
+
     return { userId: sub, username, roles, password };
   }
 }
