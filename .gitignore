@@ -37,3 +37,6 @@ lerna-debug.log*
 
 .evn.js
 .evn.prd.js
+
+evn.js
+evn.prd.js

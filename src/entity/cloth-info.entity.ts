@@ -21,8 +21,14 @@ export class Cloth {
   @Column({ comment: '婚纱类型' })
   type: number;
 
+  @Column({ comment: '婚纱套系' })
+  combo: number;
+
   @Column({ comment: '婚纱价格' })
   price: string;
+
+  @Column({ comment: '图片编号详情' })
+  imgCode: string;
 
   @Column({ comment: '婚纱封面' })
   imgCover: string;

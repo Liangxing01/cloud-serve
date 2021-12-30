@@ -7,6 +7,7 @@ import {
   Put,
   HttpCode,
   UseGuards,
+  HttpException,
 } from '@nestjs/common';
 import { ClothService } from './cloth.service';
 import { RoleGuard } from '../../guard/role.guard';
@@ -35,8 +36,13 @@ export class ClothController {
   @Roles('admin')
   @Post('add')
   async creeateOne(@Body() body) {
-    await this.userServer.post(body);
-    return '创建成功！';
+    try {
+      await this.userServer.post(body);
+      return '创建成功！';
+    } catch (err) {
+      console.log(err);
+      throw new HttpException('创建失败，请稍后再试', 500);
+    }
   }
   @HttpCode(200)
   @Get('detail')

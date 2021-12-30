@@ -8,7 +8,7 @@ interface searchWhere {
   name?: any;
   type?: number;
   code?: any;
-  priceType?: string;
+  combo?: number;
   page?: number;
   pageSize?: number;
 }
@@ -31,11 +31,11 @@ export class ClothService {
 
   // 获取所有的客户
   async getAllCloths(query: searchWhere) {
-    const { name, type, page, pageSize, priceType, code } = query;
+    const { name, type, page, pageSize, combo, code } = query;
     const where: searchWhere = {};
     name && (where.name = Like(`%${name}%`));
     type && (where.type = type);
-    priceType && (where.priceType = priceType);
+    combo && (where.combo = combo);
     code && (where.code = Like(`%${code}%`));
 
     const [list, total] = await this.clothRepository.findAndCount({
@@ -43,6 +43,9 @@ export class ClothService {
         'name',
         'code',
         'price',
+        'combo',
+        'imgCover',
+        'imgCode',
         'type',
         'createDate',
         'id',
@@ -66,12 +69,25 @@ export class ClothService {
   }
   // 新增婚纱
   async post(data: CreateClothDto) {
-    const { name, remark, type, priceType, code, imgUrls } = data;
+    const {
+      name,
+      remark,
+      type,
+      imgCode,
+      code,
+      imgUrls,
+      combo,
+      imgCover,
+      price,
+    } = data;
     const cloth = new CreateClothDto();
     cloth.name = name;
     cloth.code = code;
     cloth.type = type;
-    cloth.priceType = priceType;
+    cloth.imgCode = imgCode;
+    cloth.combo = combo;
+    cloth.price = price;
+    cloth.imgCover = imgCover;
     cloth.imgUrls = imgUrls;
     cloth.remark = remark;
     const result = await this.clothRepository.save(cloth);

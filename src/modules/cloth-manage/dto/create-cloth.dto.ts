@@ -9,7 +9,11 @@ export class CreateClothDto {
 
   type: number;
 
-  priceType: number;
+  price: string;
+
+  combo: number;
+  imgCode: string;
+  imgCover: string;
 
   imgUrls: string;
 
