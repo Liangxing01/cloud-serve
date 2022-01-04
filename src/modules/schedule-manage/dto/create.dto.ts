@@ -12,3 +12,21 @@ export class CreateDto {
 
   remark: string;
 }
+
+export class ScheduleInfoDTO {
+  username: string;
+
+  userId: number;
+
+  clothId: number;
+
+  clothName: string;
+
+  clothType: number;
+
+  clothImg: string;
+
+  startTime: string;
+
+  endTime: string;
+}

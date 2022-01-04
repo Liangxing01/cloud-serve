@@ -100,7 +100,7 @@ export class ClothService {
     return this.clothRepository.save(info);
   }
 
-  async getDetailByIds(ids: []) {
+  async getDetailByIds(ids: number[]) {
     return await this.clothRepository.find({
       where: ids.map((id) => ({ id })),
     });

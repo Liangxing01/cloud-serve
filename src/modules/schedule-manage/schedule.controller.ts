@@ -1,13 +1,14 @@
-import { Controller, Get, Post, Query, Body, Put } from '@nestjs/common';
+import { Controller, Post, Body, Put, HttpCode } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly reserveServer: ScheduleService) {}
 
-  @Get('list')
-  async getAll(@Query() query) {
-    const result = await this.reserveServer.getList(query);
+  @HttpCode(200)
+  @Post('list')
+  async getAll(@Body() body) {
+    const result = await this.reserveServer.getList(body);
     return result;
   }
 

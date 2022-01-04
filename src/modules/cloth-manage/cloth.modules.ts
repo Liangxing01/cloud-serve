@@ -8,5 +8,6 @@ import { Cloth } from '../../entity/cloth-info.entity';
   imports: [TypeOrmModule.forFeature([Cloth])],
   controllers: [ClothController],
   providers: [ClothService],
+  exports: [ClothService],
 })
 export class ClothModule {}

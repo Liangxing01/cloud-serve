@@ -1,48 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Not } from 'typeorm';
-import { ScheduleInfo } from '../../entity/schedule.entity';
+import { Schedule } from '../../entity/schedule.entity';
 import { CreateDto } from './dto/create.dto';
-
-interface searchWhere {
-  username?: any;
-  time?: any;
-  telphone?: any;
-  page?: number;
-  pageSize?: number;
-  cIds?: any;
-}
+import { Cloth } from '../../entity/cloth-info.entity';
+import { User } from '../../entity/user.entity';
 
 @Injectable()
 export class ScheduleService {
   constructor(
-    @InjectRepository(ScheduleInfo)
-    private readonly reserveRepository: Repository<ScheduleInfo>,
+    @InjectRepository(Schedule)
+    private readonly reserveRepository: Repository<Schedule>,
   ) {}
 
-  // 获取所有的客户
-  async getList(query: searchWhere) {
-    const { page, pageSize, username, telphone, time, cIds } = query;
-    const where: searchWhere = {};
-    username && (where.username = Like(`%${username}%`));
-    telphone && (where.telphone = Like(`%${telphone}%`));
-    time && (where.time = Like(`%${time}%`));
-    cIds && (where.cIds = Like(`%${cIds}%`));
+  // 获取所有的档期
 
-    const [list, total] = await this.reserveRepository.findAndCount({
-      where: {
-        deleteFlag: Not(0),
-        ...where,
-      },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      order: {
-        createDate: 'DESC',
-      },
-    });
+  async getList(query) {
+    const { page, pageSize, keywords = '', type } = query;
+    console.log(type, 'type');
+    const res = await this.reserveRepository
+      .createQueryBuilder('schedule')
+      .leftJoinAndSelect(Cloth, 'cloth', 'cloth.id = schedule.clothId')
+      .leftJoinAndSelect(User, 'user', 'user.userId = schedule.userId')
+      .select(
+        'schedule.id as id, user.userId as userId, user.name as username, cloth.id as clothId, cloth.name as clothName, cloth.code as clothCode, cloth.imgCode as imgCode, cloth.type as type, schedule.startTime as startTime, schedule.endTime as endTime',
+      )
+      .where('cloth.name LIKE :name OR user.name LIKE :username', {
+        name: keywords,
+        username: keywords,
+      })
+      .andWhere('cloth.type = :type', {
+        type: type,
+      })
+      .offset((page - 1) * (pageSize - 0))
+      .limit(pageSize - 0)
+      .getRawMany();
+
     return {
-      list,
-      total,
+      list: res,
     };
   }
   // 新增婚纱

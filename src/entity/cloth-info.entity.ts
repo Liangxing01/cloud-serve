@@ -36,7 +36,7 @@ export class Cloth {
   @Column({ comment: '图片详情' })
   imgUrls: string;
 
-  @Column({ comment: '备注' })
+  @Column({ comment: '备注', nullable: true })
   remark: string;
 
   @Column({ comment: '删除标识', default: 1 })

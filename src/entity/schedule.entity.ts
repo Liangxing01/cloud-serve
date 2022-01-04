@@ -5,26 +5,32 @@ import {
   CreateDateColumn,
   Timestamp,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Cloth } from './cloth-info.entity';
 
 @Entity()
-export class ScheduleInfo {
+export class Schedule {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ comment: '客户姓名', unique: true })
-  username: string;
+  @Column({ comment: '客户id' })
+  userId: number;
 
-  @Column({ comment: '联系方式' })
-  telphone: string;
+  // @OneToOne(() => Cloth)
+  // @JoinColumn()
+  // cloth: Cloth;
+  @Column()
+  clothId: number;
 
-  @Column({ comment: '服装id集合' })
-  cIds: string;
+  @Column({ comment: '婚纱租赁开始时间' })
+  startTime: string;
 
-  @Column({ comment: '预约时间' })
-  time: string;
+  @Column({ comment: '婚纱租赁结束时间' })
+  endTime: string;
 
-  @Column({ comment: '预约备注' })
+  @Column({ comment: '档期备注' })
   remark: string;
 
   @Column({ comment: '删除标识', default: 1 })

@@ -27,7 +27,7 @@ const { host, username, password, database } = dbConfig;
       database,
       entities: [],
       autoLoadEntities: true,
-      // synchronize: true,
+      synchronize: true,
     }),
     AccountModule, // 账户相关
     CommonModule, // 公共接口：比如文件上传
