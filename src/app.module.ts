@@ -9,6 +9,7 @@ import { UserModule } from 'modules/user-manage/user.module';
 import { ClothModule } from 'modules/cloth-manage/cloth.modules';
 import { ReserveModule } from 'modules/reserve-manage/reserve.module';
 import { ScheduleModule } from 'modules/schedule-manage/schedule.module';
+import { OrderModule } from 'modules/order/order.module';
 
 import { UserController } from 'modules/user-manage/user.controller';
 
@@ -36,6 +37,7 @@ const { host, username, password, database } = dbConfig;
     ReserveModule, // 预约相关
     ScheduleModule, // 档期相关
     AuthModule,
+    OrderModule, // 订单相关
   ],
 })
 export class AppModule implements NestModule {

@@ -6,11 +6,15 @@ export class CreateDto {
 
   telphone: string;
 
-  clothId: number;
+  clothIds: string;
+
+  time: string;
 
   startTime: string;
 
   endTime: string;
+
+  price: number;
 
   remark: string;
 }
