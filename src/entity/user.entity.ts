@@ -15,7 +15,7 @@ export class User {
   @Column({ comment: '客户姓名', unique: true })
   name: string;
 
-  @Column({ comment: '客户备注' })
+  @Column({ comment: '客户备注', nullable: true })
   remark: string;
 
   @Column({ comment: '联系方式' })
