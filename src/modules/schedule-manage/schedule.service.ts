@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Repository, Between, Brackets } from 'typeorm';
 import { Schedule } from '../../entity/schedule.entity';
 import { CreateDto } from './dto/create.dto';
 import { Cloth } from '../../entity/cloth-info.entity';
 
+const moment = require('moment');
 @Injectable()
 export class ScheduleService {
   constructor(
@@ -14,21 +15,42 @@ export class ScheduleService {
 
   // 获取所有的档期
   async getList(query) {
-    const { page, pageSize, keywords = '', type } = query;
-    console.log(type, 'type');
+    const { page, pageSize, keywords = '', type, time } = query;
     const res = await this.reserveRepository
       .createQueryBuilder('schedule')
       .leftJoinAndSelect(Cloth, 'cloth', 'cloth.id = schedule.clothId')
       .select(
-        'schedule.id as id, username, cloth.id as clothId, cloth.name as clothName, cloth.code as clothCode, cloth.imgCode as imgCode, cloth.type as type, schedule.startTime as startTime, schedule.endTime as endTime',
+        `schedule.id as id,
+         schedule.username as username,
+          schedule.startTime as startTime,
+         schedule.endTime as endTime,
+         schedule.time as time,
+          cloth.id as clothId,
+          cloth.name as clothName,
+          cloth.code as clothCode,
+          cloth.imgCode as imgCode,
+          cloth.type as type
+        `,
       )
-      .where('cloth.name LIKE :name OR user.name LIKE :username', {
-        name: keywords,
-        username: keywords,
+      .where('cloth.name LIKE :name')
+      .setParameters({
+        name: '%' + keywords + '%',
       })
-      .andWhere('cloth.type = :type', {
-        type: type,
+      .orWhere('schedule.username LIKE :username')
+      .setParameters({
+        username: '%' + keywords + '%',
       })
+      .andWhere(
+        new Brackets((qb) => {
+          if (type) {
+            qb.where('cloth.type = :type', { type });
+          }
+
+          if (time) {
+            qb.where('schedule.time = :time', { time });
+          }
+        }),
+      )
       .offset((page - 1) * (pageSize - 0))
       .limit(pageSize - 0)
       .getRawMany();
@@ -70,21 +92,29 @@ export class ScheduleService {
   async search(clothId, startTime, endTime) {
     const cIds = clothId.split(',');
     let whereArrs = [];
+    const end = moment(new Date(endTime), 'YYYY-M-D')
+      .add(1, 'days')
+      .format('YYYY-M-D');
+    const sub = moment(new Date(startTime), 'YYYY-M-D')
+      .subtract(1, 'days')
+      .format('YYYY-M-D');
+
+    console.log(typeof end, typeof sub, 'daus');
 
     cIds.forEach((id) => {
       whereArrs = whereArrs.concat([
         {
           clothId: id,
-          startTime: Between(startTime, endTime),
+          startTime: Between(sub, end),
         },
         {
           clothId: id,
-          endTime: Between(startTime, endTime),
+          endTime: Between(sub, end),
         },
       ]);
     });
 
-    return await this.reserveRepository.findOne({
+    return await this.reserveRepository.find({
       where: whereArrs,
     });
   }

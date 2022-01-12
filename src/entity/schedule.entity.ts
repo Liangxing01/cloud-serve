@@ -21,6 +21,9 @@ export class Schedule {
   @Column()
   clothId: number;
 
+  @Column({ comment: '婚纱档期时间' })
+  time: string;
+
   @Column({ comment: '婚纱租赁开始时间' })
   startTime: string;
 

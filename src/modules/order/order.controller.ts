@@ -5,6 +5,8 @@ import {
   Put,
   HttpCode,
   HttpException,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { ScheduleService } from '../schedule-manage/schedule.service';
@@ -32,24 +34,30 @@ export class ReserveController {
       endTime,
     );
 
-    if (hasOrder) {
+    if (hasOrder.length) {
       throw new HttpException('下单失败，请查看档期表！已有衣服装档', 500);
     }
     await this.orderService.post(body);
     return '创建成功！';
   }
 
+  @HttpCode(200)
   @Post('update')
   async update(@Body() body) {
     const { id, ...param } = body;
     await this.orderService.update(id, param);
     return '更新成功！';
   }
-
+  @HttpCode(200)
   @Put('delete')
   async put(@Body('id') id) {
     console.log(id, 'xxx');
     await this.orderService.delete(id);
     return '删除成功！';
+  }
+  @HttpCode(200)
+  @Get('detail')
+  async detail(@Query('id') id) {
+    return await this.orderService.getDetailById(id);
   }
 }
