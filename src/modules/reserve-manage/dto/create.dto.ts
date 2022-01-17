@@ -6,9 +6,13 @@ export class CreateDto {
 
   telphone: string;
 
-  cIds: string;
+  wxName: string;
 
-  time: string;
+  time: number;
+
+  date: string;
+
+  type: number;
 
   remark: string;
 }

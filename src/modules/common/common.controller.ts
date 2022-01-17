@@ -14,8 +14,17 @@ import { ossConfig } from '../../config/ali-oss.config';
 
 const OSS = require('ali-oss');
 
+const imagemin = require('imagemin');
+const imageminWebp = require('imagemin-webp');
 const oss_client = new OSS(ossConfig);
 
+const compImg = async function (fileBuffer) {
+  const compfile = await imagemin(fileBuffer, {
+    destination: 'public/compressed-images',
+    plugins: [imageminWebp({ quality: 75 })], // 压缩质量75%
+  });
+  return compfile;
+};
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonServer: CommonService) {}
@@ -30,6 +39,8 @@ export class CommonController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async putFile(@UploadedFile() file) {
+    const minFiles = compImg(file.buffer);
+
     const { url } = await oss_client.put(
       '/wedding/' + file.originalname,
       file.buffer,
