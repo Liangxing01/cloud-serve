@@ -12,29 +12,20 @@ export class Cloth {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ comment: '婚纱名称', unique: true })
-  name: string;
-
-  @Column({ comment: '婚纱编码' })
+  @Column({ comment: '婚纱编码', unique: true })
   code: string;
+
+  @Column({ comment: '婚纱可租数量' })
+  num: number;
+
+  @Column({ comment: '婚纱库存数量', nullable: true })
+  totalNum: number;
 
   @Column({ comment: '婚纱类型' })
   type: number;
 
-  @Column({ comment: '婚纱套系' })
-  combo: number;
-
-  @Column({ comment: '婚纱价格' })
-  price: string;
-
   @Column({ comment: '图片编号详情' })
   imgCode: string;
-
-  @Column({ comment: '婚纱封面' })
-  imgCover: string;
-
-  @Column({ comment: '图片详情' })
-  imgUrls: string;
 
   @Column({ comment: '备注', nullable: true })
   remark: string;

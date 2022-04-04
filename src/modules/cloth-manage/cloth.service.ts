@@ -22,7 +22,7 @@ export class ClothService {
   // 所有的婚纱，供下拉框选择
   async getSelects() {
     return await this.clothRepository.find({
-      select: ['name', 'id'],
+      select: ['id'],
       where: {
         deleteFlag: Not(0),
       },
@@ -31,27 +31,14 @@ export class ClothService {
 
   // 获取所有的客户
   async getAllCloths(query: searchWhere) {
-    const { name, type, page, pageSize, combo, code } = query;
+    const { code, type, page, pageSize, combo } = query;
     const where: searchWhere = {};
-    name && (where.name = Like(`%${name}%`));
+    code && (where.code = Like(`%${code}%`));
     type && (where.type = type);
     combo && (where.combo = combo);
-    code && (where.code = Like(`%${code}%`));
 
     const [list, total] = await this.clothRepository.findAndCount({
-      select: [
-        'name',
-        'code',
-        'price',
-        'combo',
-        'imgCover',
-        'imgCode',
-        'type',
-        'createDate',
-        'id',
-        'imgUrls',
-        'remark',
-      ],
+      select: ['code', 'imgCode', 'type', 'createDate', 'id', 'num', 'remark'],
       where: {
         deleteFlag: Not(0),
         ...where,
@@ -69,26 +56,13 @@ export class ClothService {
   }
   // 新增婚纱
   async post(data: CreateClothDto) {
-    const {
-      name,
-      remark,
-      type,
-      imgCode,
-      code,
-      imgUrls,
-      combo,
-      imgCover,
-      price,
-    } = data;
+    const { remark, type, imgCode, code, num } = data;
     const cloth = new CreateClothDto();
-    cloth.name = name;
     cloth.code = code;
     cloth.type = type;
     cloth.imgCode = imgCode;
-    cloth.combo = combo;
-    cloth.price = price;
-    cloth.imgCover = imgCover;
-    cloth.imgUrls = imgUrls;
+    cloth.num = num;
+    cloth.totalNum = num;
     cloth.remark = remark;
     const result = await this.clothRepository.save(cloth);
     return result;

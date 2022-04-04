@@ -33,7 +33,6 @@ export class ClothController {
   }
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(200)
-  @Roles('admin')
   @Post('add')
   async creeateOne(@Body() body) {
     try {
