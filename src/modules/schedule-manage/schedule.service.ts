@@ -59,7 +59,7 @@ export class ScheduleService {
       list: res,
     };
   }
-  // 新增婚纱
+  // 新增档期表
   async post(data: CreateDto[]) {
     const arr = [];
     data.forEach((item) => {

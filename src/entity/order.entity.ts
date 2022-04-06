@@ -33,6 +33,9 @@ export class Order {
   @Column({ comment: '婚纱封面' })
   endTime: string;
 
+  @Column({ comment: '图片备注', nullable: true })
+  remarkImgs: string;
+
   @Column({ comment: '备注', nullable: true })
   remark: string;
 

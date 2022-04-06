@@ -45,7 +45,7 @@ export class OrderService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  // 获取所有的客户
+  // 获取所有的订单
   async getList(query: searchWhere) {
     const { page, pageSize, keywords } = query;
     const where: searchWhere = {};

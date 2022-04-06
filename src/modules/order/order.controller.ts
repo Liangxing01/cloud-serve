@@ -27,7 +27,7 @@ export class ReserveController {
   @HttpCode(200)
   @Post('add')
   async creeateOne(@Body() body) {
-    const { clothIds, startTime, endTime } = body;
+    const { clothIds, startTime, endTime, telphone } = body;
     const hasOrder = await this.scheduleService.search(
       clothIds,
       startTime,
@@ -45,6 +45,24 @@ export class ReserveController {
   @Post('update')
   async update(@Body() body) {
     const { id, ...param } = body;
+    const { clothIds, startTime, endTime, telphone } = body;
+    let hasOrder = await this.scheduleService.search(
+      clothIds,
+      startTime,
+      endTime,
+    );
+
+    hasOrder = hasOrder.filter((order) => order.telphone !== telphone);
+
+    if (hasOrder.length) {
+      const { username } = hasOrder[0];
+
+      throw new HttpException(
+        `编辑失败，请查看${username}的档期表！已有衣服装档`,
+        500,
+      );
+    }
+
     await this.orderService.update(id, param);
     return '更新成功！';
   }

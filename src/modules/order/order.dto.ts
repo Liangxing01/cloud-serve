@@ -16,5 +16,7 @@ export class CreateDto {
 
   price: number;
 
+  remarkImgs: string;
+
   remark: string;
 }
