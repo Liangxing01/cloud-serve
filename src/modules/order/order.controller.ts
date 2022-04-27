@@ -7,10 +7,15 @@ import {
   HttpException,
   Get,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { ScheduleService } from '../schedule-manage/schedule.service';
+import { RoleGuard } from '../../guard/role.guard';
+import { Roles } from '../../decorator/role.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'), RoleGuard)
 @Controller('order')
 export class ReserveController {
   constructor(
@@ -19,12 +24,14 @@ export class ReserveController {
   ) {}
 
   @HttpCode(200)
+  @Roles('admin')
   @Post('list')
   async getAll(@Body() body) {
     const result = await this.orderService.getList(body);
     return result;
   }
   @HttpCode(200)
+  @Roles('admin')
   @Post('add')
   async creeateOne(@Body() body) {
     const { clothIds, startTime, endTime, telphone } = body;
@@ -42,6 +49,7 @@ export class ReserveController {
   }
 
   @HttpCode(200)
+  @Roles('admin')
   @Post('update')
   async update(@Body() body) {
     const { id, ...param } = body;
@@ -67,6 +75,7 @@ export class ReserveController {
     return '更新成功！';
   }
   @HttpCode(200)
+  @Roles('admin')
   @Put('delete')
   async put(@Body('id') id) {
     console.log(id, 'xxx');

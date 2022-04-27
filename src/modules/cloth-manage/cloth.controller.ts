@@ -15,7 +15,7 @@ import { Roles } from '../../decorator/role.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('cloth')
-@UseGuards(RoleGuard)
+@UseGuards(AuthGuard('jwt'), RoleGuard)
 export class ClothController {
   constructor(private readonly userServer: ClothService) {}
 
@@ -31,8 +31,8 @@ export class ClothController {
     const result = await this.userServer.getAllCloths(body);
     return result;
   }
-  @UseGuards(AuthGuard('jwt'))
   @HttpCode(200)
+  @Roles('admin')
   @Post('add')
   async creeateOne(@Body() body) {
     try {

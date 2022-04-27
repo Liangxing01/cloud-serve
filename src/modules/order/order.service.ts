@@ -91,7 +91,7 @@ export class OrderService {
           .execute();
         const user = await this.userRepository
           .createQueryBuilder(null, queryRunner)
-          .where('user.telphone = :telphone', {
+          .where('telphone = :telphone', {
             telphone: telphone,
           })
           .getOne();
@@ -108,10 +108,10 @@ export class OrderService {
         await queryRunner.commitTransaction();
       } catch (err) {
         await queryRunner.rollbackTransaction();
-        throw new HttpException('添加订单失败！请稍后再试！', 500);
+        throw new HttpException(err, 500);
       }
     } catch (err) {
-      throw new HttpException('服务器发生错误！', 500);
+      throw new HttpException(err, 500);
     }
   }
 
@@ -151,10 +151,10 @@ export class OrderService {
         await queryRunner.commitTransaction();
       } catch (err) {
         await queryRunner.rollbackTransaction();
-        throw new HttpException('更新订单失败！请稍后再试！', 500);
+        throw new HttpException(err, 500);
       }
     } catch (err) {
-      throw new HttpException('服务器出错！', 500);
+      throw new HttpException(err, 500);
     }
   }
 
@@ -188,10 +188,10 @@ export class OrderService {
         await queryRunner.commitTransaction();
       } catch (err) {
         await queryRunner.rollbackTransaction();
-        throw new HttpException('删除订单失败！请稍后再试！', 500);
+        throw new HttpException(err, 500);
       }
     } catch (err) {
-      throw new HttpException('服务器出错！', 500);
+      throw new HttpException(err, 500);
     }
   }
 
